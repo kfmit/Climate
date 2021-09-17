@@ -1,3 +1,4 @@
 git rm --cached CVD_Tutorials/CVD_Tutorials/Tutorial03_SSH/SSH_Tropical_Eastern_Pacific_2010_2020.nc
 git rm --cached CVD_Tutorials/CVD_Tutorials/Tutorial02_ENSO/sst.mon.mean_1982.01-2020.12.nc
 git rm --cached */*/*.nc
+git rm --cached */*.nc
