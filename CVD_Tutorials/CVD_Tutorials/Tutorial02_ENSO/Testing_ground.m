@@ -16,7 +16,7 @@ t1 = time(1);
 
 sst = permute(sstout,[3,1,2]); % The second argument indicates that new order of the original dimensions.
 size(sst);
-%%
+
 for m = 1:12  %loop over month
     climSST(m,:,:) = mean(sst(m:12:end,:,:));
 end
@@ -55,3 +55,33 @@ climSST(1,:,:);   % average SST for all Januarys
 ssta_1961_1 = sst(1,:,:)-climSST(1,:,:);
 % SST anomaly for January 1962:
 ssta_1962_1 = sst(13,:,:)-climSST(1,:,:);
+
+%% Anomaly Methods
+% Example Method 1: Using a Loop
+% initialize/preallocate an array full of nan with the same size as sst
+%% CAUSES CRASH
+anomSST = nan(size(sst));
+for i = 1:12
+    anomSST(i:12:end,:,:) = sst(i:12:end,:,:) - climSST(i,:,:); 
+end
+
+%% Example Method 2: Using repmat 
+% starting our earlier, reshaped arrays... (sst_mon)
+climSSTrep = repmat(climSST2,1,1,1,nyrs); % Use remap to repeat the matrix "nyr" times along the last dimension
+climSSTrep = permute(climSSTrep,[1,4,2,3]); % Permute back to [mon x year x lon x lat]
+anomSST2   = sst_mon - climSSTrep; % Calculate anomaly
+
+% Check to make sure the mean absolute difference is 0 (between the two methods)
+nanmax(abs(anomSST2(:)-anomSST2(:)))
+%% Figure of Anomalies
+figure(7),clf
+pcolor(lon,lat,squeeze(anomSST(1,:,:))')
+shading flat
+colorbar
+set(gca, 'Layer', 'top');
+grid on
+caxis([-3 3])
+cmocean('balance','pivot')
+title('Map of SST Anomalies')
+xlabel('longitude')
+ylabel('latitude')
