@@ -52,3 +52,20 @@ climSST(1,:,:);   % average SST for all Januarys
 ssta_1961_1 = sst(1,:,:)-climSST(1,:,:);
 % SST anomaly for January 1962:
 ssta_1962_1 = sst(13,:,:)-climSST(1,:,:);
+
+%% Pulling out Anomalies
+% Example Method 1: Using a Loop
+% initialize/preallocate an array full of nan with the same size as sst
+anomSST = nan(size(sst));
+for i = 1:12
+    anomSST(i:12:end,:,:) = sst(i:12:end,:,:) - climSST(i,:,:); 
+end
+
+% Example Method 2: Using repmat 
+% starting our earlier, reshaped arrays... (sst_mon)
+climSSTrep = repmat(climSST2,1,1,1,nyrs); % Use remap to repeat the matrix "nyr" times along the last dimension
+climSSTrep = permute(climSSTrep,[1,4,2,3]); % Permute back to [mon x year x lon x lat]
+anomSST2   = sst_mon - climSSTrep; % Calculate anomaly
+
+% Check to make sure the mean absolute difference is 0 (between the two methods)
+nanmax(abs(anomSST2(:)-anomSST2(:)))
