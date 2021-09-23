@@ -61,11 +61,11 @@ for i = 1:12
     anomSST(i:12:end,:,:) = sst(i:12:end,:,:) - climSST(i,:,:); 
 end
 
-% Example Method 2: Using repmat 
+%% Example Method 2: Using repmat 
 % starting our earlier, reshaped arrays... (sst_mon)
 climSSTrep = repmat(climSST2,1,1,1,nyrs); % Use remap to repeat the matrix "nyr" times along the last dimension
 climSSTrep = permute(climSSTrep,[1,4,2,3]); % Permute back to [mon x year x lon x lat]
 anomSST2   = sst_mon - climSSTrep; % Calculate anomaly
 
-% Check to make sure the mean absolute difference is 0 (between the two methods)
+%% Check to make sure the mean absolute difference is 0 (between the two methods)
 nanmax(abs(anomSST2(:)-anomSST2(:)))
