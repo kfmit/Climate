@@ -69,3 +69,15 @@ anomSST2   = sst_mon - climSSTrep; % Calculate anomaly
 
 %% Check to make sure the mean absolute difference is 0 (between the two methods)
 nanmax(abs(anomSST2(:)-anomSST2(:)))
+
+%%
+index2=200; %used same code
+subplot(2,1,2)
+pcolor(lon,lat,squeeze(anomSST(index2,:,:))')
+subplot(2,1,1)
+shading flat
+colorbar
+caxis([-3 3])
+set(gca, 'Layer', 'top');
+title(['sst anomaly ' sprintf('%4.3f',time(index2))]) % check out sprintf
+cmocean('balance','pivot')
