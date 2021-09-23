@@ -2,25 +2,19 @@
 
 % Sccript to Read in Data
 ncname = "sst.mon.mean_1982.01-2020.12.nc";
-ncdisp(ncname);
 
 sstout = ncread(ncname,"sst");
 time   = ncread(ncname,"time");
 lat    = ncread(ncname,"lat");
 lon    = ncread(ncname,"lon");
 
-whos;
-
-format long % type 'help format' into command line
-t1 = time(1);
-
 sst = permute(sstout,[3,1,2]); % The second argument indicates that new order of the original dimensions.
-size(sst);
+%size(sst);
 
 for m = 1:12  %loop over month
     climSST(m,:,:) = mean(sst(m:12:end,:,:));
 end
-whos climSST;
+%whos climSST;
 
 [ntime,nlon,nlat] = size(sst);% Get size of sst
 nyrs = round(ntime/12);% Determine # of years
@@ -60,10 +54,14 @@ ssta_1962_1 = sst(13,:,:)-climSST(1,:,:);
 % Example Method 1: Using a Loop
 % initialize/preallocate an array full of nan with the same size as sst
 %% CAUSES CRASH
+profile on;
 anomSST = nan(size(sst));
 for i = 1:12
-    anomSST(i:12:end,:,:) = sst(i:12:end,:,:) - climSST(i,:,:); 
+    anomSST(i:12:end,:,:) = sst(i:12:end,:,:) - climSST(i,:,:);
+    output = ['round ' num2str(i) ' done']
 end
+profile off;
+profile viewer;
 
 %% Example Method 2: Using repmat 
 % starting our earlier, reshaped arrays... (sst_mon)
